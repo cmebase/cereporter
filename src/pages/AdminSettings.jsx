@@ -4,14 +4,14 @@ import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Users, Building2, Calendar, Settings, UserCog, Printer, Download } from "lucide-react";
+import { Users, Building2, Calendar, Settings, UserCog, Printer, Download, ShieldCheck } from "lucide-react";
 import AdminUsersTab from "../components/admin/tabs/AdminUsersTab";
 import AdminManagersTab from "../components/admin/tabs/AdminManagersTab";
 import AdminHospitalsTab from "../components/admin/tabs/AdminHospitalsTab";
 import AdminYearsTab from "../components/admin/tabs/AdminYearsTab";
 import AdminAssignmentsTab from "../components/admin/tabs/AdminAssignmentsTab";
 import AdminAuditLogTab from "../components/admin/tabs/AdminAuditLogTab";
-import AdminFeatureFlagsTab from "../components/admin/tabs/AdminFeatureFlagsTab";
+import AdminRolesRulesTab from "../components/admin/tabs/AdminRolesRulesTab";
 import QuickUserInviter from "../components/admin/QuickUserInviter";
 
 export default function AdminSettings() {
@@ -32,7 +32,6 @@ export default function AdminSettings() {
     enabled: !!currentUser?.email,
   });
 
-  // Check if user is super_admin or supreme_technician
   const isSuperAdmin = assignments.some((a) => a.role === "super_admin" || a.role === "supreme_technician");
 
   if (!isSuperAdmin) {
@@ -50,7 +49,6 @@ export default function AdminSettings() {
 
   return (
     <div className="space-y-8 pb-12">
-      {/* Header */}
       <div className="relative">
         <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-indigo-500/10 to-violet-500/10 rounded-2xl blur-2xl" />
         <Card className="relative border-purple-200/50 bg-white/80 backdrop-blur-sm shadow-xl">
@@ -64,7 +62,7 @@ export default function AdminSettings() {
               </div>
               <div className="flex-1">
                 <h1 className="text-3xl font-bold text-slate-900 mb-1">Admin Settings</h1>
-                <p className="text-slate-600">System administration and configuration</p>
+                <p className="text-slate-600">System administration, access control, roles, and rules</p>
               </div>
               <div className="flex gap-2">
                 <Button
@@ -139,16 +137,17 @@ export default function AdminSettings() {
               <span className="text-xs sm:text-sm font-medium">Assignments</span>
             </TabsTrigger>
             <TabsTrigger 
+              value="rolesRules" 
+              className="flex flex-col sm:flex-row items-center justify-center gap-2 px-4 py-3 data-[state=active]:bg-gradient-to-br data-[state=active]:from-purple-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-lg rounded-lg transition-all duration-200"
+            >
+              <ShieldCheck className="w-4 h-4" />
+              <span className="text-xs sm:text-sm font-medium">Roles & Rules</span>
+            </TabsTrigger>
+            <TabsTrigger 
               value="audit" 
               className="flex items-center justify-center px-4 py-3 data-[state=active]:bg-gradient-to-br data-[state=active]:from-purple-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-lg rounded-lg transition-all duration-200"
             >
               <span className="text-xs sm:text-sm font-medium">Audit Log</span>
-            </TabsTrigger>
-            <TabsTrigger 
-              value="flags" 
-              className="flex items-center justify-center px-4 py-3 data-[state=active]:bg-gradient-to-br data-[state=active]:from-purple-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-lg rounded-lg transition-all duration-200"
-            >
-              <span className="text-xs sm:text-sm font-medium">Features</span>
             </TabsTrigger>
           </TabsList>
         </div>
@@ -174,12 +173,12 @@ export default function AdminSettings() {
           <AdminAssignmentsTab />
         </TabsContent>
 
-        <TabsContent value="audit" className="space-y-4">
-          <AdminAuditLogTab />
+        <TabsContent value="rolesRules" className="space-y-4">
+          <AdminRolesRulesTab />
         </TabsContent>
 
-        <TabsContent value="flags" className="space-y-4">
-          <AdminFeatureFlagsTab />
+        <TabsContent value="audit" className="space-y-4">
+          <AdminAuditLogTab />
         </TabsContent>
       </Tabs>
     </div>
